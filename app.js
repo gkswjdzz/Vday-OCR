@@ -24,7 +24,7 @@ var app = express();
   if (!process.env['CREDENTIALS']) {
     exit(0)
   }
-  fs.writeFileSync(`${__dirname}/key.json`, process.env['CREDENTIALS']);
+  fs.writeFileSync(`${__dirname}/key.json`, process.env['CREDENTIALS'].replace(/'/g, "\""));
   process.env['GOOGLE_APPLICATION_CREDENTIALS']=`${__dirname}/key.json`;
 })();
 
