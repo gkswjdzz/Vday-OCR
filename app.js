@@ -19,21 +19,22 @@ var upload = multer({
 
 var app = express();
 
-(() => {
+const init = () => {
   var fs = require('fs');
   if (!process.env['CREDENTIALS']) {
     exit(0)
   }
   fs.writeFileSync(`${__dirname}/key.json`, process.env['CREDENTIALS'].replace(/'/g, "\""));
   process.env['GOOGLE_APPLICATION_CREDENTIALS']=`${__dirname}/key.json`;
-})();
+};
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = filetypes.test(file.mimetype);
+  // const mimetype = filetypes.test(file.mimetype);
 
-  if (mimetype && extname) {
+  //if (mimetype && extname) {
+  if (extname) {
     return cb(null, true);
   } else {
     cb('Error: Images Only!');
@@ -75,5 +76,6 @@ app.post('/profile', upload.single('base_image'), async function (req, res) {
 })
 
 app.listen(3000, () => {
+  init();
   console.log(`Example app listening at http://localhost:${3000}`);
 })
