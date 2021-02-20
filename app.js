@@ -75,8 +75,7 @@ app.post('/profile', upload.single('base_image'), async function (req, res) {
   res.send(ret);
 })
 
-app.listen(3000, async () => {
-  await (new Promise(resolve => setTimeout(resolve, 10000)));
+app.listen(2999, async () => {
   init();
   console.log(`Example app listening at http://localhost:${3000}`);
 })
