@@ -80,7 +80,7 @@ app.post('/profile', upload.single('base_image'), async function (req, res) {
   res.send(ret);
 })
 
-app.listen(3000, async () => {
+app.listen(80, async () => {
   init();
-  console.log(`Example app listening at http://localhost:${3000}`);
+  console.log(`Example app listening at http://localhost:${80}`);
 })
