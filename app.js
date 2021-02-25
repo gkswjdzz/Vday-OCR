@@ -1,13 +1,12 @@
 const path = require("path");
 
-const vision = require('@google-cloud/vision');
-const client = new vision.ImageAnnotatorClient();
+let client;
 
-var express = require('express');
-var multer  = require('multer');
+const express = require('express');
+const multer  = require('multer');
 const { exit } = require("process");
-var storage = multer.memoryStorage();
-var upload = multer({
+const storage = multer.memoryStorage();
+const upload = multer({
   storage: storage,
   limits: {
     fileSize: 20 * 1024 * 1024
@@ -17,15 +16,21 @@ var upload = multer({
   }
 });
 
-var app = express();
+const app = express();
 
 const init = () => {
-  var fs = require('fs');
+  const fs = require('fs');
+  const vision = require('@google-cloud/vision');
+
   if (!process.env['CREDENTIALS']) {
     exit(0)
   }
   fs.writeFileSync(`${__dirname}/key.json`, process.env['CREDENTIALS'].replace(/'/g, "\""));
-  process.env['GOOGLE_APPLICATION_CREDENTIALS']=`${__dirname}/key.json`;
+  client = new vision.ImageAnnotatorClient({
+    keyFilename: `${__dirname}/key.json`
+  });
+  console.log('initialized');
+  // process.env['GOOGLE_APPLICATION_CREDENTIALS']=`${__dirname}/key.json`;
 };
 
 function checkFileType(file, cb) {
@@ -75,7 +80,7 @@ app.post('/profile', upload.single('base_image'), async function (req, res) {
   res.send(ret);
 })
 
-app.listen(2999, async () => {
+app.listen(3000, async () => {
   init();
   console.log(`Example app listening at http://localhost:${3000}`);
 })
