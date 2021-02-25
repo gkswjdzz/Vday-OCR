@@ -52,7 +52,7 @@ async function extractDescription(response) {
     return words;
   } else {
     console.log(`This image had no discernable text.`);
-    return '';
+    return [];
   }
 }
 
@@ -74,9 +74,9 @@ async function getTextFromFile (content) {
   return ret;
 }
 
-app.post('/profile', upload.single('base_image'), async function (req, res) {
+app.post('/word_extraction', upload.single('base_image'), async function (req, res) {
   const base64 = req.file.buffer.toString('base64');
-  const ret = await getTextFromFile(base64);
+  const ret = (await getTextFromFile(base64)).join();
   res.send(ret);
 })
 
